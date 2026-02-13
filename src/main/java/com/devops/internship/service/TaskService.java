@@ -57,4 +57,16 @@ public class TaskService {
     public void completeAllTasks() {
         tasks.forEach(task -> task.setCompleted(true));
     }
+
+    public int clearCompletedTasks() {
+        int removedCount = 0;
+        List<Task> completedTasks = tasks.stream()
+                .filter(Task::isCompleted)
+                .toList();
+    
+        removedCount = completedTasks.size();
+        tasks.removeAll(completedTasks);
+    
+        return removedCount;
+    }
 }

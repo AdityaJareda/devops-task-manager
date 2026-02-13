@@ -79,4 +79,15 @@ public class TaskController {
         taskService.completeAllTasks();
         return ResponseEntity.ok("All tasks marked as completed");
     }
+
+    @DeleteMapping("/clear-completed")
+    public ResponseEntity<Map<String, Object>> clearCompletedTasks() {
+        int removedCount = taskService.clearCompletedTasks();
+    
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Completed tasks cleared");
+        response.put("removedCount", removedCount);
+    
+        return ResponseEntity.ok(response);
+    }
 }
