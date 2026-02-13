@@ -73,4 +73,10 @@ public class TaskController {
         
         return ResponseEntity.ok(stats);
     }
+
+    @PostMapping("/complete-all")
+    public ResponseEntity completeAllTasks() {
+        taskService.completeAllTasks();
+        return ResponseEntity.ok("All tasks marked as completed");
+    }
 }
