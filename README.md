@@ -19,6 +19,7 @@ A production-ready RESTful API for task management, demonstrating DevOps best pr
 - CRUD operations for task management
 - Task status tracking (completed/pending)
 - Statistics endpoint for task metrics
+- Bulk operations (complete all, clear completed)
 - Health monitoring with Spring Boot Actuator
 - RESTful design with standard HTTP methods
 - In-memory data storage
@@ -174,6 +175,40 @@ Response:
   "total": 5,
   "completed": 2,
   "pending": 3
+}
+```
+
+#### Complete All Tasks
+```http
+POST /api/tasks/complete-all
+```
+
+Marks all tasks as completed.
+
+Example:
+```bash
+curl -X POST http://localhost:8080/api/tasks/complete-all
+```
+
+Response: `All tasks marked as completed`
+
+#### Clear Completed Tasks
+```http
+DELETE /api/tasks/clear-completed
+```
+
+Removes all completed tasks from the list.
+
+Example:
+```bash
+curl -X DELETE http://localhost:8080/api/tasks/clear-completed
+```
+
+Response:
+```json
+{
+  "message": "Completed tasks cleared",
+  "removedCount": 2
 }
 ```
 
