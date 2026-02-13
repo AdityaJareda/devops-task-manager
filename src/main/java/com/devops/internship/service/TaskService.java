@@ -53,4 +53,8 @@ public class TaskService {
     public boolean deleteTask(Long id) {
         return tasks.removeIf(task -> task.getId().equals(id));
     }
+
+    public void completeAllTasks() {
+        tasks.forEach(task -> task.setCompleted(true));
+    }
 }
