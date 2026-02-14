@@ -7,6 +7,7 @@ A production-ready RESTful API for task management, demonstrating DevOps best pr
 - [Features](#features)
 - [Technologies](#technologies)
 - [Getting Started](#getting-started)
+- [Docker Deployment](#docker-deployment)
 - [API Endpoints](#api-endpoints)
 - [Configuration](#configuration)
 - [Testing](#testing)
@@ -25,6 +26,8 @@ A production-ready RESTful API for task management, demonstrating DevOps best pr
 - In-memory data storage
 - Maven-based build automation
 - Configuration profiles for different environments
+- Docker containerization with multi-stage builds
+- Docker Compose for easy local development
 
 ## Technologies
 
@@ -73,6 +76,101 @@ curl http://localhost:8080/api/tasks/health
 ```
 
 Expected response: `Task API is running!`
+
+## Docker Deployment
+
+### Prerequisites
+
+- Docker installed
+- Docker Compose installed (optional, for multi-container setup)
+
+### Quick Start with Docker
+
+#### Build Docker Image
+```bash
+docker build -t spring-boot-app:latest .
+```
+
+#### Run Container
+```bash
+docker run -d \
+  --name task-api \
+  -p 8080:8080 \
+  spring-boot-app:latest
+```
+
+#### Verify Application
+```bash
+curl http://localhost:8080/api/tasks/health
+```
+
+#### View Logs
+```bash
+docker logs -f task-api
+```
+
+#### Stop Container
+```bash
+docker stop task-api
+docker rm task-api
+```
+
+### Using Docker Compose
+
+Docker Compose simplifies running the application with all its dependencies.
+
+#### Start Services
+```bash
+docker-compose up -d
+```
+
+This will:
+- Build the application image
+- Start the Spring Boot container
+- Configure networking and health checks
+
+#### View Logs
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f app
+```
+
+#### Stop Services
+```bash
+docker-compose down
+```
+
+#### Rebuild and Restart
+```bash
+docker-compose up -d --build
+```
+
+### Docker Image Details
+
+**Multi-Stage Build:**
+- **Build Stage**: Uses `maven:3.9-eclipse-temurin-17` (~500MB)
+  - Compiles Java code
+  - Downloads dependencies
+  - Packages JAR file
+- **Runtime Stage**: Uses `eclipse-temurin:17-jre-alpine` (~300MB)
+  - Minimal JRE-only image
+  - Includes only the application JAR
+  - Runs as non-root user for security
+
+**Optimizations:**
+- Layer caching for Maven dependencies
+- Separate layers for wrapper, dependencies, and source code
+- Alpine-based runtime for smaller image size
+- Non-root user execution
+
+**Configuration:**
+- Port: 8080 (configurable via environment variables)
+- Health checks: Built-in via Spring Boot Actuator
+- Resource limits: 512MB memory limit, 256MB reserved
+- Restart policy: unless-stopped
 
 ## API Endpoints
 
@@ -376,6 +474,49 @@ Required: Java 17 or higher
 ### Permission Denied on Port 80
 
 Ports below 1024 require root privileges. Use port 8080 or higher for development.
+
+### Docker Issues
+
+#### Image Build Fails
+
+Clean Docker cache and rebuild:
+```bash
+docker system prune -a
+docker build --no-cache -t spring-boot-app:latest .
+```
+
+#### Container Won't Start
+
+Check logs:
+```bash
+docker logs task-api
+```
+
+#### Port Already in Use
+
+Change host port mapping:
+```bash
+docker run -d -p 8081:8080 --name task-api spring-boot-app:latest
+```
+
+Or update `docker-compose.yml`:
+```yaml
+ports:
+  - "8081:8080"
+```
+
+#### Application Not Accessible
+
+Verify container is running:
+```bash
+docker ps
+```
+
+Check from inside container:
+```bash
+docker exec -it task-api sh
+wget -O- http://localhost:8080/api/tasks/health
+```
 
 ## Additional Resources
 
