@@ -11,6 +11,10 @@ env:
   DOCKER_IMAGE: adityajareda/devops-task-manager
   JAVA_VERSION: '17'
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -114,7 +118,7 @@ jobs:
           output: 'trivy-results.sarif'
       
       - name: Upload Trivy results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
