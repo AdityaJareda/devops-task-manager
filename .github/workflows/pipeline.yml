@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: your-dockerhub-username/devops-task-manager
+  DOCKER_IMAGE: adityajareda/devops-task-manager
   JAVA_VERSION: '17'
 
 jobs:
@@ -36,6 +36,7 @@ jobs:
       - name: Generate test report
         if: always()
         uses: dorny/test-reporter@v1
+        continue-on-error: true
         with:
           name: Maven Tests
           path: target/surefire-reports/*.xml
