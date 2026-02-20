@@ -37,14 +37,14 @@ jobs:
             
             ### Download
             Download the JAR file below and run with:
-```bash
+            ```bash
             java -jar spring-boot-app-1.0.0.jar
-```
+            ```
             
             ### Docker Image
-```bash
+            ```bash
             docker pull adityajareda/devops-task-manager:${{ github.ref_name }}
-```
+            ```
           draft: false
           prerelease: false
         env:
