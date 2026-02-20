@@ -12,7 +12,6 @@ env:
   JAVA_VERSION: '17'
 
 jobs:
-  # Job 1: Build and Test
   build-and-test:
     runs-on: ubuntu-latest
     
@@ -48,7 +47,6 @@ jobs:
           name: application-jar
           path: target/*.jar
   
-  # Job 2: Code Quality Check
   code-quality:
     runs-on: ubuntu-latest
     needs: build-and-test
@@ -70,7 +68,6 @@ jobs:
       - name: Run SpotBugs
         run: ./mvnw spotbugs:check || true
   
-  # Job 3: Build and Push Docker Image
   docker-build-push:
     runs-on: ubuntu-latest
     needs: [build-and-test, code-quality]
@@ -108,6 +105,19 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache
           cache-to: type=registry,ref=${{ env.DOCKER_IMAGE }}:buildcache,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.DOCKER_IMAGE }}:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
       
       - name: Image Summary
         run: |

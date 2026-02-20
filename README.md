@@ -1,5 +1,10 @@
 # DevOps Task Manager API
 
+![CI Status](https://github.com/AdityaJareda/devops-task-manager/workflows/Complete%20CI%2FCD%20Pipeline/badge.svg)
+![Docker Build](https://github.com/AdityaJareda/devops-task-manager/workflows/Docker%20Build%20and%20Push/badge.svg)
+![Docker Image Size](https://img.shields.io/docker/image-size/adityajareda/devops-task-manager/latest)
+![Docker Pulls](https://img.shields.io/docker/pulls/adityajareda/devops-task-manager)
+
 A production-ready RESTful API for task management, demonstrating DevOps best practices with Spring Boot, Maven, and automated workflows.
 
 ## Table of Contents

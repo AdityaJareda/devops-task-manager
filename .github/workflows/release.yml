@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+      
+      - name: Build release artifact
+        run: ./mvnw clean package -DskipTests
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar
+          body: |
+            ## Release Notes
+            
+            ### Changes
+            - Production-ready Spring Boot application
+            - Containerized with Docker
+            - Automated CI/CD pipeline
+            
+            ### Download
+            Download the JAR file below and run with:
+```bash
+            java -jar spring-boot-app-1.0.0.jar
+```
+            
+            ### Docker Image
+```bash
+            docker pull adityajareda/devops-task-manager:${{ github.ref_name }}
+```
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
