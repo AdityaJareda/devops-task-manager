@@ -544,7 +544,7 @@ This project is licensed under the MIT License.
 
 ## Author
 
-**Your Name**
+**Aditya Singh**
 - GitHub: [@AdityaJareda](https://github.com/AdityaJareda)
 - LinkedIn: [Aditya Singh](www.linkedin.com/in/adityajareda)
 - Email: adityajareda.work@gmail.com
